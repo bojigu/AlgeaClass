@@ -1,0 +1,14 @@
+0,Total_area
+1,Diameter
+2,Maximal_radius
+3,Minimal_radius
+4,Minimal/maximal_radius
+5,Syto9_fluo
+6,Syto9_background
+7,Syto9_fluo_time_norm
+8,Syto9_fluo_size_norm
+9,PI_fluo
+10,PI_background
+11,PI_fluo_time_norm
+12,PI_fluo_size_norm
+13,Syto9_fluo/PI_fluo

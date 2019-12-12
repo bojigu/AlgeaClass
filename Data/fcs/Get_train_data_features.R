@@ -5,6 +5,7 @@ setwd(directory)
 library(plyr)
 library(reshape)
 library(flowCore)
+library(flowFP)
 library(MASS)
 library(h2o)
 library(ggplot2)
@@ -18,7 +19,7 @@ if(file.exists("fset.RData")) {
 }
 
 parse_name <- function(name) {
-  csource <- substr(name, 3,6)
+  csource <- substr(name, 1,3)
   day <- substr(name, 8,8)
   rep <- substr(name, 10,10)
   c(csource, day, rep, name)
@@ -67,7 +68,7 @@ bigset <- bigset[, !(names(bigset) %in% c(".id"))]
 datasplitter <- 1:nrow(bigset) # total number of rows .
 datasplitter <- datasplitter %% 4; 
 
-training_set <- bigset[which(datasplitter %in% c(0,1)),] ## Training set
+training_set <- bigset[which(datasplitter %in% c(0,1,2,3)),] ## Training set
 validation_set <- bigset[which(datasplitter %in% c(2)),]
 test_set <- bigset[which(datasplitter %in% c(3)),]
 
@@ -93,9 +94,6 @@ mod <- flowFPModel(fset, name="FSC/SSC Model", parameters=c(1,4), nRecursions=7)
 show(mod)
 plot(mod)
 fset
-mod <- flowFPModel(fset, name="FSC/SSC Model", parameters=c(1,2), nRecursions=7)
-show(mod)
-plot(mod)
 fp <- flowFP (fset, mod)
 plot(fp, type="stack")
 p <- flowFP (fset, param=c("FSC-A", "SSC-A"), nRecursions=8)
@@ -112,10 +110,9 @@ for (levels in 7:5) {
 }
 plot (plex, type="tangle", transformation="norm")
 fp1 <- flowFP (fset, parameters=c("FSC-A", "SSC-A"), name="self model: fs1", nRecursions=7)
-plot (fp1, type="qc", main="Gate QC for Sample fs1")
-fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","AmCyan-A"), nRecursions=5)
+plot (fp, type="qc", main="Gate QC for Sample fs1")
+fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","PerCP-Cy5-5-A"), nRecursions=5)
 plot (fp, type='plate')
-nRecursions(fset)
 nRecursions(fp)
 counts(fp)
 sampleNames(fp)
@@ -124,7 +121,7 @@ parameters(fp)
 tags(fp)
 binBoundary(fp)
 counts(fp)
-fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","AmCyan-A"), nRecursions=7)
+fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","PerCP-Cy5-5-A"), nRecursions=7)
 counts(fp)
 plot (fp, type='plate')
 binBoundary(fp)
@@ -132,7 +129,7 @@ plot(fp)
 plot(counts(fp))
 a=counts(fp)
 plot(a)
-fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","AmCyan-A"), nRecursions=5)
+fp <- flowFP (fset, parameters=c("FSC-A","SSC-A","PerCP-Cy5-5-A"), nRecursions=5)
 a=counts(fp)
 plot(a)
 matrix(a)
